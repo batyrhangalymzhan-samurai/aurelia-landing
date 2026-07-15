@@ -568,43 +568,52 @@ async function submitQuiz(calcConfig) {
 }
 
 /* ---------------------------------------------------------
-   Phone mask: +7 (7XX) XXX-XX-XX
-   Kazakhstan mobile numbers always start with 7 after the
-   country code, so that digit is fixed and non-editable.
+   Phone mask: +7 (XXX) XXX-XX-XX
+   Kazakhstan format — 10 digits after country code, e.g.
+   705 123 45 67 → +7 (705) 123-45-67
    --------------------------------------------------------- */
 function setupPhoneMask(input) {
   if (!input) return;
 
   const applyMask = (raw) => {
-    let digits = raw.replace(/\D/g, '');
-    if (digits.startsWith('7') || digits.startsWith('8')) digits = digits.slice(1);
-    digits = ('7' + digits).slice(0, 10);
+    // Strip the +7 / 8 country prefix from raw input so typed
+    // digits are not merged with the displayed country code
+    // (fixes 705 → 777 05 when +7 and 7 were concatenated).
+    let cleaned = raw.trim();
+    cleaned = cleaned.replace(/^\+7[\s\-()]*/, '');
+    cleaned = cleaned.replace(/^8[\s\-()]*/, '');
+    const digits = cleaned.replace(/\D/g, '').slice(0, 10);
 
     let formatted = '+7';
-    if (digits.length > 0) formatted += ' (' + digits.slice(0, 3);
-    if (digits.length >= 3) formatted += ')';
-    if (digits.length > 3) formatted += ' ' + digits.slice(3, 6);
-    if (digits.length > 6) formatted += '-' + digits.slice(6, 8);
-    if (digits.length > 8) formatted += '-' + digits.slice(8, 10);
+    if (digits.length > 0) {
+      formatted += ' (' + digits.slice(0, 3) + ')';
+      if (digits.length > 3) formatted += ' ' + digits.slice(3, 6);
+      if (digits.length > 6) formatted += '-' + digits.slice(6, 8);
+      if (digits.length > 8) formatted += '-' + digits.slice(8, 10);
+    } else {
+      formatted += ' ';
+    }
 
     input.value = formatted;
     input.dataset.rawDigits = digits;
   };
 
   input.addEventListener('focus', () => {
-    if (!input.value) applyMask('');
+    if (!input.dataset.rawDigits && !input.value.trim()) {
+      input.value = '+7 ';
+    }
   });
 
   input.addEventListener('input', (e) => {
     applyMask(e.target.value);
-    e.target.setSelectionRange(e.target.value.length, e.target.value.length);
+    requestAnimationFrame(() => {
+      e.target.setSelectionRange(e.target.value.length, e.target.value.length);
+    });
   });
 
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Backspace' && (input.dataset.rawDigits || '').length <= 1) {
-      e.preventDefault();
+  input.addEventListener('blur', () => {
+    if (!input.dataset.rawDigits) {
       input.value = '';
-      input.dataset.rawDigits = '';
     }
   });
 }
