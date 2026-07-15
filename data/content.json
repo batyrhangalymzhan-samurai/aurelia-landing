@@ -195,6 +195,11 @@
         "title": "Апартаменты, Esentai",
         "before": "https://picsum.photos/seed/interior-before-3/1000/700",
         "after": "https://picsum.photos/seed/interior-after-3/1000/700"
+      },
+      {
+        "title": "легенда",
+        "before": "/uploads/win_20260529_23_43_12_pro.jpg",
+        "after": "/uploads/win_20260529_23_43_03_pro.jpg"
       }
     ]
   },
