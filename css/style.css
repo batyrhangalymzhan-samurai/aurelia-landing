@@ -1,0 +1,440 @@
+/* =========================================================
+   AURELIA — Premium Interior Studio Landing
+   Base styles, glassmorphism, gold glow & animations
+   ========================================================= */
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scrollbar-color: #B8975E #121218;
+}
+
+body {
+  background-color: #0B0B0F;
+}
+
+/* ---------- Mesh gradient background ---------- */
+.bg-mesh {
+  background-color: #0B0B0F;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(212, 175, 55, 0.10), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 15%, rgba(212, 175, 55, 0.07), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(148, 163, 184, 0.06), transparent 60%),
+    linear-gradient(180deg, #0B0B0F 0%, #121218 45%, #0B0B0F 100%);
+}
+
+.bg-mesh-soft {
+  background-image:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(212, 175, 55, 0.08), transparent 65%);
+}
+
+.hero-glow {
+  background-image:
+    radial-gradient(circle 500px at 25% 30%, rgba(212, 175, 55, 0.14), transparent 70%),
+    radial-gradient(circle 400px at 80% 70%, rgba(212, 175, 55, 0.08), transparent 70%);
+}
+
+/* ---------- Glassmorphism ---------- */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+#site-header.is-scrolled {
+  background: rgba(11, 11, 15, 0.72);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* ---------- Gold gradient text ---------- */
+.text-gradient-gold {
+  background: linear-gradient(90deg, #E2C99D 0%, #D4AF37 50%, #B8975E 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Section helpers ---------- */
+.section-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #B8975E;
+  background: linear-gradient(90deg, #E2C99D 0%, #D4AF37 50%, #B8975E 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-title {
+  font-family: 'Clash Display', 'Syne', sans-serif;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: #F9F9FB;
+}
+
+@media (min-width: 1024px) {
+  .section-title { font-size: 2.75rem; }
+}
+
+.nav-link {
+  position: relative;
+  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover {
+  color: #F9F9FB;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #E2C99D, #D4AF37);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ---------- Buttons ---------- */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  color: #0B0B0F;
+  background: linear-gradient(90deg, #E2C99D 0%, #D4AF37 55%, #B8975E 100%);
+  background-size: 160% 160%;
+  background-position: 0% 50%;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background-position 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-gold:hover {
+  transform: scale(1.05);
+  background-position: 100% 50%;
+  box-shadow: 0 0 40px rgba(212, 175, 55, 0.35);
+}
+
+.btn-gold:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  color: #F9F9FB;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-ghost:hover {
+  transform: scale(1.05);
+  border-color: rgba(212, 175, 55, 0.5);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 1.25rem;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+}
+
+/* ---------- Selectable option cards (quiz) ---------- */
+.option-card {
+  cursor: pointer;
+  text-align: left;
+  padding: 1.25rem 1.4rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.option-card:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+  background: rgba(212, 175, 55, 0.06);
+  transform: translateY(-3px);
+}
+
+.option-card.is-selected {
+  border-color: #D4AF37;
+  background: rgba(212, 175, 55, 0.10);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.20);
+}
+
+.option-card .option-label {
+  font-weight: 600;
+  color: #F9F9FB;
+}
+
+.option-card .option-desc {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: #94A3B8;
+}
+
+/* ---------- Form fields (smart focus) ---------- */
+.field-group {
+  position: relative;
+}
+
+.field-input {
+  width: 100%;
+  padding: 1.1rem 1rem 0.55rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.85rem;
+  color: #F9F9FB;
+  font-size: 0.95rem;
+  transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.field-label {
+  position: absolute;
+  left: 1rem;
+  top: 0.9rem;
+  font-size: 0.95rem;
+  color: #94A3B8;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.field-input:focus ~ .field-label,
+.field-input:not(:placeholder-shown) ~ .field-label {
+  top: 0.35rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  color: #D4AF37;
+}
+
+.field-input.field-error {
+  border-color: #F87171;
+}
+
+/* ---------- Scroll reveal animation ---------- */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  transition: opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+[data-animate].is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ---------- Before / After slider ---------- */
+.ba-slider {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  user-select: none;
+  cursor: ew-resize;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+}
+
+.ba-slider img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.ba-slider .ba-after-wrap {
+  position: absolute;
+  inset: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+/* The "after" image is pinned to the wrapper's left edge at the slider's
+   full width (set inline via JS), so shrinking the wrapper reveals more
+   or less of it — the classic before/after clip technique. */
+.ba-slider .ba-after-wrap img {
+  max-width: none;
+}
+
+.ba-tag {
+  position: absolute;
+  top: 1rem;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border-radius: 9999px;
+  background: rgba(11, 11, 15, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ba-tag.tag-before { left: 1rem; }
+.ba-tag.tag-after { right: 1rem; }
+
+.ba-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  background: linear-gradient(180deg, #E2C99D, #D4AF37, #B8975E);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.7), 0 0 40px rgba(212, 175, 55, 0.35);
+  transform: translateX(-50%);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.ba-handle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(11, 11, 15, 0.75);
+  border: 1px solid rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.ba-handle::after {
+  content: '↔';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  color: #E2C99D;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ---------- Testimonials ---------- */
+.testi-card {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .testi-card { flex: 0 0 calc(50% - 12px); }
+}
+
+@media (min-width: 1024px) {
+  .testi-card { flex: 0 0 calc(33.333% - 16px); }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+/* ---------- FAQ accordion ---------- */
+.faq-item {
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faq-item.is-open {
+  border-color: rgba(212, 175, 55, 0.35);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.4rem;
+  text-align: left;
+  color: #F9F9FB;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.faq-icon {
+  flex-shrink: 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #D4AF37;
+}
+
+.faq-item.is-open .faq-icon {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faq-answer-inner {
+  padding: 0 1.4rem 1.4rem;
+  color: #94A3B8;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+/* ---------- Preloader ---------- */
+#preloader.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Misc ---------- */
+::selection {
+  background: rgba(212, 175, 55, 0.3);
+  color: #F9F9FB;
+}

@@ -1,0 +1,173 @@
+# =========================================================
+# Decap CMS configuration for AURELIA Interior Studio
+# Docs: https://decapcms.org/docs/configuration-options/
+# =========================================================
+
+# --- Backend -------------------------------------------------
+# Default: Netlify Identity + Git Gateway (zero OAuth setup,
+# requires hosting on Netlify with Identity + Git Gateway enabled).
+backend:
+  name: git-gateway
+  branch: main
+
+# If you host on Vercel (or plain GitHub Pages) instead of Netlify,
+# comment the block above and use the GitHub backend below together
+# with an OAuth provider (e.g. https://github.com/vencax/netlify-cms-github-oauth-provider
+# or Vercel's own OAuth proxy). Fill in your repo and OAuth client id.
+#
+# backend:
+#   name: github
+#   repo: your-github-username/your-repo-name
+#   branch: main
+#   base_url: https://your-oauth-provider.example.com
+
+local_backend: true # allows `npx decap-server` for local editing, see README
+
+# --- Media (photos uploaded from the CMS) ---------------------
+media_folder: "uploads"
+public_folder: "/uploads"
+
+site_url: https://your-domain.com
+display_url: https://your-domain.com
+logo_url: /favicon.svg
+
+locale: "ru"
+
+# --- Collections -----------------------------------------------
+# The whole site content lives in one editable file: data/content.json
+collections:
+  - name: "settings"
+    label: "Контент сайта"
+    files:
+      - name: "content"
+        label: "Весь контент AURELIA"
+        file: "data/content.json"
+        fields:
+          - label: "Бренд"
+            name: "brand"
+            widget: "object"
+            fields:
+              - { label: "Название", name: "name", widget: "string" }
+              - { label: "Слоган", name: "tagline", widget: "string" }
+
+          - label: "Главный экран (Hero)"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Бейдж над заголовком", name: "badge", widget: "string" }
+              - { label: "Заголовок", name: "title", widget: "text", hint: "Перенос строки — новая строка в заголовке" }
+              - { label: "Подзаголовок", name: "subtitle", widget: "text" }
+              - { label: "Текст кнопки (основной)", name: "ctaPrimary", widget: "string" }
+              - { label: "Текст кнопки (вторичный)", name: "ctaSecondary", widget: "string" }
+              - label: "Статистика"
+                name: "stats"
+                widget: "list"
+                fields:
+                  - { label: "Значение", name: "value", widget: "number" }
+                  - { label: "Суффикс", name: "suffix", widget: "string" }
+                  - { label: "Подпись", name: "label", widget: "string" }
+
+          - label: "Услуги"
+            name: "services"
+            widget: "list"
+            fields:
+              - label: "Иконка"
+                name: "icon"
+                widget: "select"
+                options: ["compass", "key", "eye", "sofa", "cpu", "sparkles"]
+              - { label: "Заголовок", name: "title", widget: "string" }
+              - { label: "Описание", name: "text", widget: "text" }
+
+          - label: "Этапы работы"
+            name: "process"
+            widget: "list"
+            fields:
+              - { label: "Номер", name: "step", widget: "string" }
+              - { label: "Заголовок", name: "title", widget: "string" }
+              - { label: "Описание", name: "text", widget: "text" }
+
+          - label: "До / После"
+            name: "beforeAfter"
+            widget: "object"
+            fields:
+              - { label: "Заголовок секции", name: "title", widget: "string" }
+              - { label: "Подзаголовок секции", name: "subtitle", widget: "string" }
+              - label: "Объекты"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Название объекта", name: "title", widget: "string" }
+                  - { label: "Фото «До»", name: "before", widget: "image" }
+                  - { label: "Фото «После»", name: "after", widget: "image" }
+
+          - label: "Калькулятор"
+            name: "calculator"
+            widget: "object"
+            fields:
+              - { label: "Заголовок секции", name: "title", widget: "string" }
+              - { label: "Подзаголовок секции", name: "subtitle", widget: "string" }
+              - { label: "Валюта", name: "currency", widget: "string" }
+              - label: "Шаг 1 — Тип объекта"
+                name: "step1"
+                widget: "object"
+                fields:
+                  - { label: "Заголовок шага", name: "title", widget: "string" }
+                  - label: "Варианты"
+                    name: "options"
+                    widget: "list"
+                    fields:
+                      - { label: "Название", name: "label", widget: "string" }
+                      - { label: "Значение (латиница, без пробелов)", name: "value", widget: "string" }
+                      - { label: "Множитель цены", name: "modifier", widget: "number", value_type: "float" }
+              - label: "Шаг 2 — Площадь"
+                name: "step2"
+                widget: "object"
+                fields:
+                  - { label: "Заголовок шага", name: "title", widget: "string" }
+                  - label: "Варианты"
+                    name: "options"
+                    widget: "list"
+                    fields:
+                      - { label: "Название", name: "label", widget: "string" }
+                      - { label: "Значение (латиница, без пробелов)", name: "value", widget: "string" }
+                      - { label: "Расчётная площадь, м²", name: "area", widget: "number" }
+              - label: "Шаг 3 — Класс ремонта"
+                name: "step3"
+                widget: "object"
+                fields:
+                  - { label: "Заголовок шага", name: "title", widget: "string" }
+                  - label: "Варианты"
+                    name: "options"
+                    widget: "list"
+                    fields:
+                      - { label: "Название", name: "label", widget: "string" }
+                      - { label: "Значение (латиница, без пробелов)", name: "value", widget: "string" }
+                      - { label: "Цена за м², KZT", name: "pricePerM2", widget: "number" }
+                      - { label: "Описание", name: "description", widget: "string", required: false }
+
+          - label: "Отзывы"
+            name: "testimonials"
+            widget: "list"
+            fields:
+              - { label: "Имя", name: "name", widget: "string" }
+              - { label: "Объект / роль", name: "role", widget: "string" }
+              - { label: "Текст отзыва", name: "text", widget: "text" }
+              - { label: "Рейтинг (1–5)", name: "rating", widget: "number", min: 1, max: 5 }
+
+          - label: "FAQ"
+            name: "faq"
+            widget: "list"
+            fields:
+              - { label: "Вопрос", name: "q", widget: "string" }
+              - { label: "Ответ", name: "a", widget: "text" }
+
+          - label: "Контакты"
+            name: "contacts"
+            widget: "object"
+            fields:
+              - { label: "Телефон", name: "phone", widget: "string" }
+              - { label: "Telegram", name: "telegram", widget: "string" }
+              - { label: "Instagram", name: "instagram", widget: "string" }
+              - { label: "WhatsApp", name: "whatsapp", widget: "string" }
+              - { label: "Адрес", name: "address", widget: "string" }
+              - { label: "Часы работы", name: "workHours", widget: "string" }
