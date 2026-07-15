@@ -6,9 +6,12 @@
    slider, quiz calculator, phone mask, Web3Forms submission.
    ========================================================= */
 
-// Get your free key at https://web3forms.com and paste it below.
-// Then enable the Telegram integration in the Web3Forms dashboard
-// (Integrations → Telegram) — no bot token ever touches this file.
+// Куда отправлять заявки из квиза:
+// 'whatsapp'  — открывает WhatsApp с готовым текстом (без API-ключей, работает сразу)
+// 'web3forms' — отправка через Web3Forms (нужен access key ниже)
+const LEAD_SUBMIT_METHOD = 'whatsapp';
+
+// Только для LEAD_SUBMIT_METHOD = 'web3forms'
 const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
 const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
 
@@ -461,7 +464,7 @@ function goToStep(stepNumber) {
     nextBtn.textContent = 'Далее';
     nextBtn.disabled = !quizState.answers[`step${stepNumber}`];
   } else {
-    nextBtn.textContent = 'Отправить заявку';
+    nextBtn.textContent = LEAD_SUBMIT_METHOD === 'whatsapp' ? 'Отправить в WhatsApp' : 'Отправить заявку';
     validateContactStep();
   }
 }
@@ -488,6 +491,48 @@ function validateContactStep() {
   return isValid;
 }
 
+function buildLeadMessage(name, phone, calcConfig) {
+  const { step1, step2, step3 } = quizState.answers;
+  const almatyTime = new Date().toLocaleString('ru-RU', {
+    timeZone: 'Asia/Almaty',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+
+  return [
+    '💎 ПРЕМЬЕРА: НОВАЯ ЗАЯВКА 💎',
+    '━━━━━━━━━━━━━━━━━━━━━━━━',
+    `👤 Клиент: ${name}`,
+    `📞 Телефон: ${phone}`,
+    '',
+    '📋 Расчет в калькуляторе:',
+    `▫️ Тип: ${step1.label}`,
+    `▫️ Площадь: ${step2.label}`,
+    `▫️ Класс: ${step3.label}`,
+    '',
+    `💰 Предварительный бюджет: ${formatNumber(quizState.price)} ${calcConfig.currency}`,
+    '━━━━━━━━━━━━━━━━━━━━━━━━',
+    `📅 Время заявки (Алматы): ${almatyTime}`
+  ].join('\n');
+}
+
+function getWhatsAppNumber() {
+  const link = CONTENT?.contacts?.whatsapp || '';
+  const digits = link.replace(/\D/g, '');
+  return digits.length >= 10 ? digits : null;
+}
+
+function showQuizSuccess(message) {
+  document.querySelectorAll('.quiz-step').forEach((el) => el.classList.add('hidden'));
+  document.querySelector('.quiz-step[data-step="success"]').classList.remove('hidden');
+  document.getElementById('quiz-nav').classList.add('hidden');
+  document.getElementById('quiz-progress').style.width = '100%';
+  document.getElementById('quiz-step-label').textContent = 'Готово';
+  if (message) {
+    document.getElementById('quiz-success-text').textContent = message;
+  }
+}
+
 async function submitQuiz(calcConfig) {
   const errorEl = document.getElementById('quiz-error');
   errorEl.classList.add('hidden');
@@ -505,28 +550,25 @@ async function submitQuiz(calcConfig) {
 
   const name = document.getElementById('quiz-name').value.trim();
   const phone = document.getElementById('quiz-phone').value;
-  const { step1, step2, step3 } = quizState.answers;
-  const almatyTime = new Date().toLocaleString('ru-RU', {
-    timeZone: 'Asia/Almaty',
-    day: '2-digit', month: '2-digit', year: 'numeric',
-    hour: '2-digit', minute: '2-digit'
-  });
+  const message = buildLeadMessage(name, phone, calcConfig);
 
-  const message = [
-    '💎 ПРЕМЬЕРА: НОВАЯ ЗАЯВКА 💎',
-    '━━━━━━━━━━━━━━━━━━━━━━━━',
-    `👤 Клиент: ${name}`,
-    `📞 Телефон: ${phone}`,
-    '',
-    '📋 Расчет в калькуляторе:',
-    `▫️ Тип: ${step1.label}`,
-    `▫️ Площадь: ${step2.label}`,
-    `▫️ Класс: ${step3.label}`,
-    '',
-    `💰 Предварительный бюджет: ${formatNumber(quizState.price)} ${calcConfig.currency}`,
-    '━━━━━━━━━━━━━━━━━━━━━━━━',
-    `📅 Время заявки (Алматы): ${almatyTime}`
-  ].join('\n');
+  if (LEAD_SUBMIT_METHOD === 'whatsapp') {
+    const waNumber = getWhatsAppNumber();
+    if (!waNumber) {
+      errorEl.textContent = 'WhatsApp не настроен. Укажите номер в CMS: Контакты → WhatsApp (формат https://wa.me/77001234567).';
+      errorEl.classList.remove('hidden');
+      nextBtn.disabled = false;
+      nextBtn.textContent = originalLabel;
+      return;
+    }
+
+    const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+    showQuizSuccess('WhatsApp открыт с вашей заявкой. Нажмите «Отправить» в чате — и мы свяжемся с вами в течение 15 минут.');
+    return;
+  }
+
+  const { step1, step2, step3 } = quizState.answers;
 
   const payload = {
     access_key: WEB3FORMS_ACCESS_KEY,
@@ -551,11 +593,7 @@ async function submitQuiz(calcConfig) {
     const data = await res.json();
 
     if (data.success) {
-      document.querySelectorAll('.quiz-step').forEach((el) => el.classList.add('hidden'));
-      document.querySelector('.quiz-step[data-step="success"]').classList.remove('hidden');
-      document.getElementById('quiz-nav').classList.add('hidden');
-      document.getElementById('quiz-progress').style.width = '100%';
-      document.getElementById('quiz-step-label').textContent = 'Готово';
+      showQuizSuccess('Наш архитектор свяжется с вами в течение 15 минут для уточнения деталей проекта.');
     } else {
       throw new Error(data.message || 'Ошибка отправки');
     }
